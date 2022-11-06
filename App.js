@@ -1,3 +1,4 @@
+
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, ImageBackground, Image, Button, TextInput, FlatList } from 'react-native';
 import background from "./assets/flight.png"
@@ -11,11 +12,8 @@ import DatePicker from 'react-native-date-picker';
 // import { render } from 'react-dom';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
-const API_KEY = "f892f0570amsh0888b19e7ff4f1cp1ac3b7jsn4810c1d92686"
+// const API_KEY = "f892f0570amsh0888b19e7ff4f1cp1ac3b7jsn4810c1d92686"
 const baseURL = 'https://priceline-com-provider.p.rapidapi.com/v1/flights/search?'
-
-
-
 
 const Stack = createNativeStackNavigator();
 
@@ -56,7 +54,7 @@ function HomeScreen(props) {
       <ImageBackground
         source={background}
         style={styles.background}
-        blurRadius='2'
+        // blurRadius='2'
       >
         <Text style={styles.text1}>Travel Hub</Text>
         <Image source={require("./assets/plane.png")}
@@ -80,7 +78,7 @@ function HomeScreen(props) {
 function SecondScreen(props) {
   var dt = new Date();
   const [date, setDate] = useState();
-  const [itineraryType, setFlightType] = useState('ONE_WAY');
+  const [itineraryType, setFlightType] = useState('ROUND_TRIP');
   const [sourcelocation, setSLocation] = useState("IND")
   const [destinationlocation, setDLocation] = useState("NYC")
   const [npass, setNpass] = useState('1')
@@ -126,7 +124,7 @@ function SecondScreen(props) {
       <ImageBackground
         source={background}
         style={styles.background}
-        blurRadius='2'
+        // blurRadius='2'
       >
         <Text style={styles.text2}>Travel Hub</Text>
         <TextInput style={styles.input}
@@ -175,13 +173,20 @@ function SecondScreen(props) {
   mode="date"
   onConfirm={(newDate) => setDate(newDate)}
 /> */}
-          <Button title={`Show Date Picker (${date})`} onPress={showDatePicker} />
+          <Button title={`Select Departure Date: (${date})`} onPress={showDatePicker} />
           <DateTimePickerModal
             isVisible={isDatePickerVisible}
             mode="date"
             onConfirm={handleConfirm}
             onCancel={hideDatePicker}
           />
+          {/* <Button title={`Select Arrival Date: (${date})`} onPress={showDatePicker} />
+          <DateTimePickerModal
+            isVisible={isDatePickerVisible}
+            mode="date"
+            onConfirm={handleConfirm}
+            onCancel={hideDatePicker}
+          /> */}
           {/* <DatePicker
         style={{width: 200}}
         date={date}
@@ -255,11 +260,14 @@ function ThirdScreen({ route, navigation }) {
     )
   }
   else {
+    // console.log('aaaa',flightData.pricedItinerary);
     return (
       <View>
         <FlatList
-          renderItem={({ item, index }) => <FlightDetailsCell data={item} source={sourceCity} getAirlineName={getAirlineName} />}
+          renderItem={({ item, index }) => <FlightDetailsCell data={item}  source={sourceCity} getAirlineName={getAirlineName} />}
           data={flightData?.segment}
+          
+          
         />
       </View>
     )
@@ -267,22 +275,24 @@ function ThirdScreen({ route, navigation }) {
 }
 
 function FlightDetailsCell(props) {
-  const { data, source, getAirlineName } = props;
+  const { data, price, source, getAirlineName } = props;
   const airlineName = getAirlineName(data.marketingAirline);
   const initials = airlineName.split(" ").map((n)=>n[0]).join("");
   if (source === data.origAirport)
     return (
-      <View style={{ padding: 5, margin: 10, backgroundColor: 'grey' }}>
+      <View style={{ padding: 5, margin: 10, backgroundColor: '#b0c4de' }}>
         <View style={{ flexDirection: 'row' }}>
           <View style={{flex:1}}>
-            <Text>Airline: {airlineName}</Text>
-            <Text>Source: {data.origAirport}</Text>
+            <Text style={{fontSize:20, fontWeight:'900'}}>Airline: {airlineName}</Text>
+            <Text style={{flexDirection:'row'}}>Source: {data.origAirport}</Text>  
             <Text>Destination : {data.destAirport}</Text>
+            
+            
             <Text>Duration : {data.duration} minutes</Text>
             <Text>Departure Time: {moment(data.departDateTime).format('LLL')}</Text>
             <Text>Arrival Time: {moment(data.arrivalDateTime).format('LLL')}</Text>
           </View>
-          <View style={{ height: 40, width: 40, backgroundColor: 'red',alignItems:'center',justifyContent:'center' }}><Text>{initials}</Text></View>
+          <View style={{ height: 40, width: 40, backgroundColor: '#d3d3d3',alignItems:'center',justifyContent:'center' }}><Text>{initials}</Text></View>
         </View>
 
 
